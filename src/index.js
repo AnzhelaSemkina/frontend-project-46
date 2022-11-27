@@ -5,15 +5,17 @@ import _ from 'lodash';
 const getAbsoluteFilePath = (filePath) => path.resolve(filePath);
 const readFile = (filePath) => fs.readFileSync(getAbsoluteFilePath(filePath), 'utf8');
 const parseFile = (filePath) => JSON.parse(readFile(filePath));
-// const getFormat = (filePath) => {
-//   const name = filePath.split('/').at(-1);
-//   const format = name.split('.').at(-1);
-//   return format;
-// };
+const getFormat = (filePath) => {
+  const name = filePath.split('/').at(-1);
+  const format = name.split('.').at(-1);
+  return format;
+};
 
 const gendiff = (filePath1, filePath2) => {
   const data1 = parseFile(filePath1);
   const data2 = parseFile(filePath2);
+  const format = getFormat(filePath1);
+  console.log(format);
 
   const keys1 = Object.keys(data1);
   const keys2 = Object.keys(data2);
