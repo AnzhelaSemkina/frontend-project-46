@@ -1,21 +1,26 @@
 import * as fs from 'node:fs';
 import path from 'path';
 import _ from 'lodash';
+import yaml from 'js-yaml';
 
 const getAbsoluteFilePath = (filePath) => path.resolve(filePath);
 const readFile = (filePath) => fs.readFileSync(getAbsoluteFilePath(filePath), 'utf8');
-const parseFile = (filePath) => JSON.parse(readFile(filePath));
-const getFormat = (filePath) => {
-  const name = filePath.split('/').at(-1);
-  const format = name.split('.').at(-1);
-  return format;
-};
+const parseFileJson = (filePath) => JSON.parse(readFile(filePath));
+const parseFileYaml = (filePath) => yaml.load(readFile(filePath));
+const getFormat = (filePath) => path.extname(filePath);
 
 const gendiff = (filePath1, filePath2) => {
-  const data1 = parseFile(filePath1);
-  const data2 = parseFile(filePath2);
   const format = getFormat(filePath1);
   console.log(format);
+  let data1 = {};
+  let data2 = {};
+  if (format === '.json') {
+    data1 = parseFileJson(filePath1);
+    data2 = parseFileJson(filePath2);
+  } else if (format === '.yml' || format === '.yaml') {
+    data1 = parseFileYaml(filePath1);
+    data2 = parseFileYaml(filePath2);
+  }
 
   const keys1 = Object.keys(data1);
   const keys2 = Object.keys(data2);
