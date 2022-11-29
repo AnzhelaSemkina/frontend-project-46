@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import parser from './parsers.js';
+import parser from './parser.js';
 
 const gendiff = (filePath1, filePath2) => {
   const data1 = parser(filePath1);
