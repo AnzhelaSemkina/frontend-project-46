@@ -16,6 +16,6 @@ const parsers = (filePath) => {
   if (format === '.yml' || format === '.yaml') {
     return parseFileYaml(filePath);
   }
-  return 'Неверный формат данных';
+  return new Error('Invalid data format!');
 };
 export default parsers;
