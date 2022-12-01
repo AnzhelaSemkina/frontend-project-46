@@ -6,11 +6,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: make install
-      - name: run lint
-        run: make lint
-      - name: run test
-        run: make test
-      - name: run test & publish code coverage
+      - run: make lint
+      - run: make test
+      - name: Run test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
