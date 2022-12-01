@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import parsers from './parsers.js';
 
-const gendiff = (filePath1, filePath2) => {
+const gendiff = (filePath1, filePath2, formatType = 'stylish') => {
   const data1 = parsers(filePath1);
   const data2 = parsers(filePath2);
 
