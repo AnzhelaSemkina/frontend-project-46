@@ -24,8 +24,11 @@ const gendiff = (filePath1, filePath2, formatType = 'stylish') => {
       }
       return res;
     });
-  const res = `{
-  ${result}}`;
-  return res.replace(/[",]/g, '  ');
+  let res;
+  if (formatType === 'stylish') {
+    res = `  ${result}`;
+    res = res.replace(/[",]/g, '  ');
+  }
+  return res;
 };
 export default gendiff;
