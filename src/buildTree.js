@@ -1,29 +1,32 @@
 import _ from 'lodash';
 
 const diff = (data1, data2) => {
-  const keys1 = Object.keys(data1);
-  const keys2 = Object.keys(data2);
-  const keys = _.union(keys1, keys2);
+  const keys = _.union(Object.keys(data1), Object.keys(data2));
 
   const result = keys.sort()
-    .map((key) => {
+    .reduce((acc, key) => {
       if (_.isObject(data1[key]) && _.isObject(data2[key])) {
-        return [{ key, type: 'nested', value: diff(data1[key], data2[key]) }];
+        acc.push({ key, type: 'nested', value: diff(data1[key], data2[key]) });
+        return acc;
       }
       if (!Object.hasOwn(data1, key)) {
-        return [{ key, type: 'added', value: data2[key] }];
+        acc.push({ key, type: 'added', value: data2[key] });
+        return acc;
       }
       if (!Object.hasOwn(data2, key)) {
-        return [{ key, type: 'deleted', value: data1[key] }];
+        acc.push({ key, type: 'deleted', value: data1[key] });
+        return acc;
       }
       if (data1[key] !== data2[key]) {
-        return [{
+        acc.push({
           key, type: 'changed', value1: data1[key], value2: data2[key],
-        }];
+        });
+        return acc;
       }
-      return [{ key, type: 'unchanged', value: data2[key] }];
-    });
-
+      acc.push({ key, type: 'unchanged', value: data2[key] });
+      return acc;
+    }, []);
+  console.log(result);
   return result;
 };
 
