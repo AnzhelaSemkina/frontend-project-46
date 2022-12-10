@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const objectToString = (value, currentDepth, replacer = ' ', spacesCount = 1) => {
   const indentSize = currentDepth * spacesCount;
   const indent = replacer.repeat(indentSize);
@@ -13,9 +15,12 @@ const stringify = (value) => {
       console.log('return', currentValue);
       return `${currentValue}`;
     }
+    if (!_.has(currentValue[1], 'type')) {
+      return objectToString(currentValue, depth + 1);
+    }
 
-    const lines = [currentValue]
-      .map((key) => objectToString(`${key[0]}: ${iter(key[1])}`, depth, '  ', 1));
+    const lines = currentValue
+      .map((key) => objectToString(`${key[0]}: ${iter(key[1], depth + 1)}`, depth, '  ', 1));
     return lines;
   };
 
