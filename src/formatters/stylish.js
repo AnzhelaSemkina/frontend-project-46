@@ -1,56 +1,45 @@
-import _ from 'lodash';
-
-const objectToString = (value, currentDepth, replacer = ' ', spacesCount = 1) => {
-  const indentSize = currentDepth * spacesCount;
-  const indent = replacer.repeat(indentSize);
-
-  return `${indent}${value}`;
-};
-
-const stringify = (value) => {
+const stringify = (value, replacer = ' ', spacesCount = 1) => {
   const iter = (currentValue, depth) => {
-    console.log('currentValue:', currentValue);
-
     if (typeof currentValue !== 'object' || currentValue === null) {
-      console.log('return', currentValue);
       return `${currentValue}`;
     }
-    if (!_.has(currentValue[1], 'type')) {
-      return objectToString(currentValue, depth + 1);
-    }
 
-    const lines = currentValue
-      .map((key) => objectToString(`${key[0]}: ${iter(key[1], depth + 1)}`, depth, '  ', 1));
-    return lines;
+    const indentSize = depth * spacesCount;
+    const indent = replacer.repeat(indentSize);
+    const bracketIndent = replacer.repeat(indentSize - spacesCount);
+
+    const lines = Object.entries(currentValue)
+      .map(([key, val]) => `${indent}${key}: ${iter(val, depth + 1)}`);
+    console.log('lines', lines);
+
+    return [
+      '{',
+      ...lines,
+      `${bracketIndent}}`,
+    ].join('\n');
   };
 
   return iter(value, 1);
 };
 
 const stylish = (diff, depth) => {
-  // const bracketIndent = replacer.repeat(indentSize - spacesCount);
-
-  const result = diff.flatMap(([key, val]) => {
-    console.log('resultValue', [key, val]);
+  const result = diff.map((val) => {
+    console.log('resultValue', val);
     switch (val.type) {
       case 'nested':
-        return `  ${key}: ${stylish(val.value, ' ', depth + 1)}`;
+        return `\n  ${val.key}: ${stylish(val.value)}`;
       case 'deleted':
-        return `- ${key}: ${stringify(val.value, ' ', depth + 1)}`;
+        return `\n- ${val.key}: ${stringify(val.value, ' ', depth + 1)}`;
       case 'added':
-        return `+ ${key}: ${stringify(val.value, ' ', depth + 1)}`;
+        return `\n+ ${val.key}: ${stringify(val.value, ' ', depth + 1)}`;
       case 'changed':
-        return `- ${key}: ${stringify(val.value1, ' ', depth + 1)}\n+ ${key}: ${stringify(val.value2, ' ', depth + 1)}`;
+        return `\n- ${val.key}: ${stringify(val.value1, ' ', depth + 1)}\n+ ${val.key}: ${stringify(val.value2, ' ', depth + 1)}`;
       default:
-        return `  ${key}: ${stringify(val.value, ' ', depth + 1)}`;
+        return `\n  ${val.key}: ${stringify(val.value, ' ', depth + 1)}`;
     }
   });
-  console.log(7, result);
-  return [
-    '{',
-    ...result,
-    '}',
-  ].join('\n');
+  console.log('resultStylish', result);
+  return `{${result}\n}`;
 };
 
 export default stylish;
