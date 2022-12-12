@@ -7,7 +7,9 @@ const stringify = (value, replacer = ' ', spacesCount = 1) => {
     const indentSize = depth * spacesCount;
     const indent = replacer.repeat(indentSize);
     const bracketIndent = replacer.repeat(indentSize - spacesCount);
-
+    console.log('indentSize', indentSize);
+    console.log('indent', '..', indent, '..');
+    console.log('bracketIndent', '..', bracketIndent, '..');
     const lines = Object.entries(currentValue)
       .map(([key, val]) => `${indent}${key}: ${iter(val, depth + 1)}`);
     console.log('lines', lines);
@@ -23,19 +25,18 @@ const stringify = (value, replacer = ' ', spacesCount = 1) => {
 };
 
 const stylish = (diff, depth) => {
-  const result = diff.map((val) => {
-    console.log('resultValue', val);
+  const result = diff.map(([key, val]) => {
     switch (val.type) {
       case 'nested':
-        return `\n  ${val.key}: ${stylish(val.value)}`;
+        return `\n  ${key}: ${stylish(val.value, ' ', depth + 2)}`;
       case 'deleted':
-        return `\n- ${val.key}: ${stringify(val.value, ' ', depth + 1)}`;
+        return `\n- ${key}: ${stringify(val.value, ' ', depth + 2)}`;
       case 'added':
-        return `\n+ ${val.key}: ${stringify(val.value, ' ', depth + 1)}`;
+        return `\n+ ${key}: ${stringify(val.value, ' ', depth + 2)}`;
       case 'changed':
-        return `\n- ${val.key}: ${stringify(val.value1, ' ', depth + 1)}\n+ ${val.key}: ${stringify(val.value2, ' ', depth + 1)}`;
+        return `\n- ${key}: ${stringify(val.value1, ' ', depth + 2)}\n+ ${key}: ${stringify(val.value2, ' ', depth + 2)}`;
       default:
-        return `\n  ${val.key}: ${stringify(val.value, ' ', depth + 1)}`;
+        return `\n  ${key}: ${stringify(val.value, ' ', depth + 2)}`;
     }
   });
   console.log('resultStylish', result);
