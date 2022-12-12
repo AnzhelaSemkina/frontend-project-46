@@ -1,4 +1,4 @@
-const stringify = (value, replacer = ' ', spacesCount = 1) => {
+const stringify = (value, replacer = '  ', spacesCount = 1) => {
   const iter = (currentValue, depth) => {
     if (typeof currentValue !== 'object' || currentValue === null) {
       return `${currentValue}`;
@@ -10,6 +10,7 @@ const stringify = (value, replacer = ' ', spacesCount = 1) => {
     console.log('indentSize', indentSize);
     console.log('indent', '..', indent, '..');
     console.log('bracketIndent', '..', bracketIndent, '..');
+    console.log(currentValue);
     const lines = Object.entries(currentValue)
       .map(([key, val]) => `${indent}${key}: ${iter(val, depth + 1)}`);
     console.log('lines', lines);
@@ -25,22 +26,26 @@ const stringify = (value, replacer = ' ', spacesCount = 1) => {
 };
 
 const stylish = (diff, depth) => {
+  const currentIndent = ' '.repeat(depth);
   const result = diff.map(([key, val]) => {
     switch (val.type) {
       case 'nested':
-        return `\n  ${key}: ${stylish(val.value, '  ', depth + 1)}`;
+        return `${currentIndent}  ${key}: ${stylish(val.value, '  ', depth + 1)}`;
       case 'deleted':
-        return `\n- ${key}: ${stringify(val.value, '  ', depth + 1)}`;
+        return `${currentIndent}- ${key}: ${stringify(val.value, '  ', depth + 1)}`;
       case 'added':
-        return `\n+ ${key}: ${stringify(val.value, '  ', depth + 1)}`;
+        return `${currentIndent}+ ${key}: ${stringify(val.value, '  ', depth + 1)}`;
       case 'changed':
-        return `\n- ${key}: ${stringify(val.value1, '  ', depth + 1)}\n+ ${key}: ${stringify(val.value2, '  ', depth + 1)}`;
+        return `${currentIndent}- ${key}: ${stringify(val.value1, '  ', depth + 1)}\n${currentIndent}+ ${key}: ${stringify(val.value2, '  ', depth + 1)}`;
       default:
-        return `\n  ${key}: ${stringify(val.value, '  ', depth + 1)}`;
+        return `${currentIndent}  ${key}: ${stringify(val.value, '  ', depth + 1)}`;
     }
   });
   console.log('resultStylish', result);
-  return `{${result}\n}`;
+  return [
+    '{',
+    ...result,
+  ].join('\n');
 };
 
 export default stylish;
