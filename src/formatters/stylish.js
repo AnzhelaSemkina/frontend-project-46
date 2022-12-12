@@ -35,7 +35,7 @@ const stylish = (diff, depth) => {
   const result = diff.map(([key, val]) => {
     switch (val.type) {
       case 'nested':
-        return `  ${key}: ${stylish(val.value, depth + 1)}`;
+        return `${indent}  ${key}: ${stylish(val.value, depth + 1)}`;
       case 'deleted':
         return `${indent}- ${key}: ${stringify(val.value, '  ', depth + 1)}`;
       case 'added':
