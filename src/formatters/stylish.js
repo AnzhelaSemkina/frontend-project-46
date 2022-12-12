@@ -28,15 +28,15 @@ const stylish = (diff, depth) => {
   const result = diff.map(([key, val]) => {
     switch (val.type) {
       case 'nested':
-        return `\n  ${key}: ${stylish(val.value, ' ', depth + 2)}`;
+        return `\n  ${key}: ${stylish(val.value, '  ', depth + 1)}`;
       case 'deleted':
-        return `\n- ${key}: ${stringify(val.value, ' ', depth + 2)}`;
+        return `\n- ${key}: ${stringify(val.value, '  ', depth + 1)}`;
       case 'added':
-        return `\n+ ${key}: ${stringify(val.value, ' ', depth + 2)}`;
+        return `\n+ ${key}: ${stringify(val.value, '  ', depth + 1)}`;
       case 'changed':
-        return `\n- ${key}: ${stringify(val.value1, ' ', depth + 2)}\n+ ${key}: ${stringify(val.value2, ' ', depth + 2)}`;
+        return `\n- ${key}: ${stringify(val.value1, '  ', depth + 1)}\n+ ${key}: ${stringify(val.value2, '  ', depth + 1)}`;
       default:
-        return `\n  ${key}: ${stringify(val.value, ' ', depth + 2)}`;
+        return `\n  ${key}: ${stringify(val.value, '  ', depth + 1)}`;
     }
   });
   console.log('resultStylish', result);
