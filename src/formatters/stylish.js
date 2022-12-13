@@ -1,49 +1,51 @@
-const stringify = (value, depth) => {
+const getIndent = (depth, correctSize = 0) => {
   const replacer = '  ';
   const spacesCount = 2;
   const indentSize = depth * spacesCount;
-  const indent = replacer.repeat(indentSize);
+  const indent = replacer.repeat(indentSize - correctSize);
   const bracketIndent = replacer.repeat(indentSize - spacesCount);
+  return { indent, bracketIndent };
+};
+
+const stringify = (value, depth) => {
+  const indents = getIndent(depth);
 
   if (typeof value !== 'object' || value === null) {
     return `${value}`;
   }
 
   const lines = Object.entries(value)
-    .map(([key, val]) => `${indent}${key}: ${stringify(val, depth + 1)}`);
+    .map(([key, val]) => `${indents.indent}${key}: ${stringify(val, depth + 1)}`);
 
   return [
     '{',
     ...lines,
-    `${bracketIndent}}`,
+    `${indents.bracketIndent}}`,
   ].join('\n');
 };
 
 const stylish = (diff, depth) => {
-  const replacer = '  ';
-  const spacesCount = 2;
-  const indentSize = depth * spacesCount;
-  const indent = replacer.repeat(indentSize - 1);
-  const bracketIndent = replacer.repeat(indentSize - spacesCount);
+  const indents = getIndent(depth, 1);
 
   const result = diff.map(([key, val]) => {
     switch (val.type) {
       case 'nested':
-        return `${indent}  ${key}: ${stylish(val.value, depth + 1)}`;
+        return `${indents.indent}  ${key}: ${stylish(val.value, depth + 1)}`;
       case 'deleted':
-        return `${indent}- ${key}: ${stringify(val.value, depth + 1)}`;
+        return `${indents.indent}- ${key}: ${stringify(val.value, depth + 1)}`;
       case 'added':
-        return `${indent}+ ${key}: ${stringify(val.value, depth + 1)}`;
+        return `${indents.indent}+ ${key}: ${stringify(val.value, depth + 1)}`;
       case 'changed':
-        return `${indent}- ${key}: ${stringify(val.value1, depth + 1)}\n${indent}+ ${key}: ${stringify(val.value2, depth + 1)}`;
+        return `${indents.indent}- ${key}: ${stringify(val.value1, depth + 1)}\n${indents.indent}+ ${key}: ${stringify(val.value2, depth + 1)}`;
       default:
-        return `${indent}  ${key}: ${stringify(val.value, depth + 1)}`;
+        return `${indents.indent}  ${key}: ${stringify(val.value, depth + 1)}`;
     }
   });
+
   return [
     '{',
     ...result,
-    `${bracketIndent}}`,
+    `${indents.bracketIndent}}`,
   ].join('\n');
 };
 
