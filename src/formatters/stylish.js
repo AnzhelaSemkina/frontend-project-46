@@ -1,45 +1,40 @@
-const makeObjectToString = (currentValue, level) => {
+const stringify = (value, depth) => {
   const replacer = ' ';
   const spacesCount = 2;
-  const indentSize = level * spacesCount;
+  const indentSize = depth * spacesCount;
   const indent = replacer.repeat(indentSize);
   const bracketIndent = replacer.repeat(indentSize - spacesCount);
-  if (typeof currentValue === 'object') {
-    return [
-      '{',
-      ...currentValue,
-      `${bracketIndent}}`,
-    ].join('\n');
-  }
-  return `${indent}${currentValue}`;
-};
 
-const stringify = (value, depth) => {
   if (typeof value !== 'object' || value === null) {
     return `${value}`;
   }
 
   const lines = Object.entries(value)
-    .map(([key, val]) => makeObjectToString(`${key}: ${stringify(val, depth + 1)}`, depth + 2));
-  return makeObjectToString(lines, depth + 1);
+    .map(([key, val]) => `${indent}${key}: ${stringify(val, depth + 1)}`, depth + 2);
+
+  return [
+    '{',
+    ...lines,
+    `${bracketIndent}}`,
+  ].join('\n');
 };
 
 const stylish = (diff, depth) => {
   const result = diff.map(([key, val]) => {
     switch (val.type) {
       case 'nested':
-        return makeObjectToString(`${key}: ${stylish(val.value, depth + 2)}`, depth + 1);
+        return `  ${key}: ${stylish(val.value, depth + 2)}`;
       case 'deleted':
-        return makeObjectToString(`- ${key}: ${stringify(val.value, depth + 1)}`, depth);
+        return `- ${key}: ${stringify(val.value, depth + 1)}`;
       case 'added':
-        return makeObjectToString(`+ ${key}: ${stringify(val.value, depth + 1)}`, depth);
+        return `+ ${key}: ${stringify(val.value, depth + 1)}`;
       case 'changed':
-        return `${makeObjectToString(`- ${key}: ${stringify(val.value1, depth + 1)}`, depth)}\n${makeObjectToString(`+ ${key}: ${stringify(val.value2, depth + 1)}`, depth)}`;
+        return `- ${key}: ${stringify(val.value1, depth + 1)}\n+ ${key}: ${stringify(val.value2, depth + 1)}`;
       default:
-        return makeObjectToString(`${key}: ${stringify(val.value, depth + 1)}`, depth + 1);
+        return `  ${key}: ${stringify(val.value, depth + 1)}`;
     }
   });
-  return makeObjectToString(result, depth);
+  return stringify([...result]);
 };
 
 export default stylish;
