@@ -34,7 +34,7 @@ const stylish = (diff, depth) => {
         return `  ${key}: ${stringify(val.value, depth + 1)}`;
     }
   });
-  return stringify([...result]);
+  return result.join('\n');
 };
 
 export default stylish;
