@@ -1,7 +1,6 @@
-const replacer = ' ';
-const spacesCount = 2;
-
 const makeObjectToString = (currentValue, level) => {
+  const replacer = ' ';
+  const spacesCount = 2;
   const indentSize = level * spacesCount;
   const indent = replacer.repeat(indentSize);
   const bracketIndent = replacer.repeat(indentSize - spacesCount);
@@ -22,7 +21,6 @@ const stringify = (value, depth) => {
 
   const lines = Object.entries(value)
     .map(([key, val]) => makeObjectToString(`${key}: ${stringify(val, depth + 1)}`, depth + 2));
-  console.log('lines', lines);
   return makeObjectToString(lines, depth + 1);
 };
 
@@ -38,10 +36,9 @@ const stylish = (diff, depth) => {
       case 'changed':
         return `${makeObjectToString(`- ${key}: ${stringify(val.value1, depth + 1)}`, depth)}\n${makeObjectToString(`+ ${key}: ${stringify(val.value2, depth + 1)}`, depth)}`;
       default:
-        return makeObjectToString(`  ${key}: ${stringify(val.value, depth + 1)}`, depth);
+        return makeObjectToString(`${key}: ${stringify(val.value, depth + 1)}`, depth + 1);
     }
   });
-  console.log('resultStylish', result);
   return makeObjectToString(result, depth);
 };
 
