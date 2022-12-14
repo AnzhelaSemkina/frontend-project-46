@@ -2,8 +2,8 @@ import _ from 'lodash';
 
 const diff = (data1, data2) => {
   const keys = Object.keys({ ...data1, ...data2 });
-
-  const result = _.sortBy(keys).map((key) => {
+  const sortedKeys = _.sortBy(keys);
+  const result = sortedKeys.map((key) => {
     if (_.isObject(data1[key]) && _.isObject(data2[key])) {
       return [key, { type: 'nested', value: diff(data1[key], data2[key]) }];
     }
