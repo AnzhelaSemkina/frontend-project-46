@@ -32,3 +32,9 @@ test('yamlNested', () => {
   const actualData = gendiff(getFixturePath('file3.yaml'), getFixturePath('file4.yaml'));
   expect(actualData).toEqual(expectedData);
 });
+
+test('plain', () => {
+  const expectedData = readFile('expectedDataToPlain.txt');
+  const actualData = gendiff(getFixturePath('file3.json'), getFixturePath('file4.json'), 'plain');
+  expect(actualData).toEqual(expectedData);
+});
