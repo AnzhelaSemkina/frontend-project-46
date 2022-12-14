@@ -1,6 +1,6 @@
 import parsers from './parsers.js';
 import diff from './buildTree.js';
-import formatter from './formatter.js';
+import formatter from './formatters/index.js';
 
 const gendiff = (filePath1, filePath2, formatType = 'stylish') => {
   const data1 = parsers(filePath1);
