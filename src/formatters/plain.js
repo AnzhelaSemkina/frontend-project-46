@@ -11,19 +11,21 @@ const stringify = (value) => {
 const plain = (diff) => {
   const getResult = (currentValue, path = '') => {
     const result = currentValue
-      .filter(([, val]) => val.type !== 'unchanged')
-      .map(([key, val]) => {
-        switch (val.type) {
+      .filter(({ type }) => type !== 'unchanged')
+      .map((node) => {
+        const { key, type, value } = node;
+        const currentPath = `${path}${key}`;
+        switch (type) {
           case 'nested':
-            return getResult(val.value, `${path}${key}.`);
+            return getResult(value, `${currentPath}.`);
           case 'deleted':
-            return `Property '${path}${key}' was removed`;
+            return `Property '${currentPath}' was removed`;
           case 'added':
-            return `Property '${path}${key}' was added with value: ${stringify(val.value)}`;
+            return `Property '${currentPath}' was added with value: ${stringify(value)}`;
           case 'changed':
-            return `Property '${path}${key}' was updated. From ${stringify(val.value1)} to ${stringify(val.value2)}`;
+            return `Property '${currentPath}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
           default:
-            throw new Error(`Invalid type: ${val.type}`);
+            throw new Error(`Invalid type: ${type}`);
         }
       });
     return result.join('\n');
