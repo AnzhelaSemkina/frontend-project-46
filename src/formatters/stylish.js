@@ -31,7 +31,7 @@ const stylish = (diff, depth) => {
     const { key, type, value } = node;
     switch (type) {
       case 'nested':
-        return `${indents.indent}  ${key}: ${stylish(value, depth + 1)}`;
+        return `${indents.indent}  ${key}: ${stylish(node.children, depth + 1)}`;
       case 'deleted':
         return `${indents.indent}- ${key}: ${stringify(value, depth + 1)}`;
       case 'added':
