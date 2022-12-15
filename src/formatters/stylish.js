@@ -27,18 +27,19 @@ const stringify = (value, depth) => {
 const stylish = (diff, depth) => {
   const indents = getIndent(depth, 1);
 
-  const result = diff.map(([key, val]) => {
-    switch (val.type) {
+  const result = diff.map((node) => {
+    const { key, type, value } = node;
+    switch (type) {
       case 'nested':
-        return `${indents.indent}  ${key}: ${stylish(val.value, depth + 1)}`;
+        return `${indents.indent}  ${key}: ${stylish(value, depth + 1)}`;
       case 'deleted':
-        return `${indents.indent}- ${key}: ${stringify(val.value, depth + 1)}`;
+        return `${indents.indent}- ${key}: ${stringify(value, depth + 1)}`;
       case 'added':
-        return `${indents.indent}+ ${key}: ${stringify(val.value, depth + 1)}`;
+        return `${indents.indent}+ ${key}: ${stringify(value, depth + 1)}`;
       case 'changed':
-        return `${indents.indent}- ${key}: ${stringify(val.value1, depth + 1)}\n${indents.indent}+ ${key}: ${stringify(val.value2, depth + 1)}`;
+        return `${indents.indent}- ${key}: ${stringify(node.value1, depth + 1)}\n${indents.indent}+ ${key}: ${stringify(node.value2, depth + 1)}`;
       default:
-        return `${indents.indent}  ${key}: ${stringify(val.value, depth + 1)}`;
+        return `${indents.indent}  ${key}: ${stringify(value, depth + 1)}`;
     }
   });
 
