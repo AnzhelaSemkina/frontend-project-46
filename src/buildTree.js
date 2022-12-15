@@ -6,7 +6,7 @@ const diff = (data1, data2) => {
 
   const result = sortedKeys.map((key) => {
     if (_.isObject(data1[key]) && _.isObject(data2[key])) {
-      return { key, type: 'nested', value: diff(data1[key], data2[key]) };
+      return { key, type: 'nested', children: diff(data1[key], data2[key]) };
     }
 
     if (!Object.hasOwn(data1, key)) {
