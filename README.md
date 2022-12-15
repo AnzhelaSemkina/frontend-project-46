@@ -40,14 +40,26 @@ make publish
 npm link
 ```
 
+#### Gendiff flat files JSON
+
 [![asciicast](https://asciinema.org/a/x1jzT5tOyPEZrIZmxHKp6PWVs.svg)](https://asciinema.org/a/x1jzT5tOyPEZrIZmxHKp6PWVs)
+
+#### Gendiff flat files YAML
 
 [![asciicast](https://asciinema.org/a/ROq0bO65jiEUqz3lBMsi1LiqY.svg)](https://asciinema.org/a/ROq0bO65jiEUqz3lBMsi1LiqY)
 
+#### Gendiff nested files JSON
+
 [![asciicast](https://asciinema.org/a/5697UQdqAMakSgkPOnNpNqocp.svg)](https://asciinema.org/a/5697UQdqAMakSgkPOnNpNqocp)
+
+#### Gendiff nested files YAML
 
 [![asciicast](https://asciinema.org/a/7Wwp34Z0qy1xVARAqvx686pEP.svg)](https://asciinema.org/a/7Wwp34Z0qy1xVARAqvx686pEP)
 
+#### Gendiff nested files to format plain
+
 [![asciicast](https://asciinema.org/a/Y55XHfpeTr8xUh6Nzx32Xu6p2.svg)](https://asciinema.org/a/Y55XHfpeTr8xUh6Nzx32Xu6p2)
+
+#### Gendiff nested files to format JSON
 
 [![asciicast](https://asciinema.org/a/tpEvEOjmDq0K8hpCk0chjY6ZC.svg)](https://asciinema.org/a/tpEvEOjmDq0K8hpCk0chjY6ZC)
