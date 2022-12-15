@@ -17,7 +17,7 @@ const plain = (diff) => {
         const currentPath = `${path}${key}`;
         switch (type) {
           case 'nested':
-            return getResult(value, `${currentPath}.`);
+            return getResult(node.children, `${currentPath}.`);
           case 'deleted':
             return `Property '${currentPath}' was removed`;
           case 'added':
