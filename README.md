@@ -6,7 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/4e01237fceb948c1d6c2/maintainability)](https://codeclimate.com/github/AnzhelaSemkina/frontend-project-46/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4e01237fceb948c1d6c2/test_coverage)](https://codeclimate.com/github/AnzhelaSemkina/frontend-project-46/test_coverage)
 
-This repository contains a CLI utility for finding differences between two files. Supported input data formats are JSON and YAML. The output can be formatted in 3 ways: stylish, plain and JSON.
+This repository contains a CLI utility for finding differences between two files. Supported input data formats are JSON and YAML. The output can be formatted in 3 ways: stylish, plain text and JSON.
 
 ## Minimum Requirements:
 
