@@ -9,38 +9,23 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-test('json', () => {
-  const expectedData = readFile('expectedData.txt');
-  const actualData = gendiff(getFixturePath('file1.json'), getFixturePath('file2.json'));
-  expect(actualData).toEqual(expectedData);
-});
-
-test('yaml', () => {
-  const expectedData = readFile('expectedData.txt');
-  const actualData = gendiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'));
-  expect(actualData).toEqual(expectedData);
-});
-
-test('jsonNested', () => {
-  const expectedData = readFile('expectedData2.txt');
-  const actualData = gendiff(getFixturePath('file3.json'), getFixturePath('file4.json'));
-  expect(actualData).toEqual(expectedData);
-});
-
-test('yamlNested', () => {
-  const expectedData = readFile('expectedData2.txt');
-  const actualData = gendiff(getFixturePath('file3.yaml'), getFixturePath('file4.yaml'));
-  expect(actualData).toEqual(expectedData);
-});
-
-test('genDiffToPlain', () => {
-  const expectedData = readFile('expectedDataToPlain.txt');
-  const actualData = gendiff(getFixturePath('file3.json'), getFixturePath('file4.json'), 'plain');
-  expect(actualData).toEqual(expectedData);
-});
-
-test('genDiffToJson', () => {
-  const expectedData = readFile('expectedDataToJson.json');
-  const actualData = gendiff(getFixturePath('file3.json'), getFixturePath('file4.json'), 'json');
-  expect(actualData).toEqual(expectedData);
+test.each([
+  {
+    value1: 'file1.json', value2: 'file2.json', format: undefined, expected: 'expectedData.txt',
+  },
+  {
+    value1: 'file1.yaml', value2: 'file2.yaml', format: 'stylish', expected: 'expectedData.txt',
+  },
+  {
+    value1: 'file1.json', value2: 'file2.json', format: 'plain', expected: 'expectedDataToPlain.txt',
+  },
+  {
+    value1: 'file1.json', value2: 'file2.json', format: 'json', expected: 'expectedDataToJson.json',
+  },
+])('Check gendiff($value1, $value2, $format)', ({
+  value1, value2, format, expected,
+}) => {
+  const data1 = getFixturePath(value1);
+  const data2 = getFixturePath(value2);
+  expect(gendiff(data1, data2, format)).toBe(readFile(expected));
 });
